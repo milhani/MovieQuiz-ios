@@ -64,11 +64,6 @@
                                                 <state key="normal" title="Нет">
                                                     <color key="titleColor" name="YP Black"/>
                                                 </state>
-                                                <userDefinedRuntimeAttributes>
-                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius ">
-                                                        <integer key="value" value="15"/>
-                                                    </userDefinedRuntimeAttribute>
-                                                </userDefinedRuntimeAttributes>
                                                 <connections>
                                                     <action selector="noButtonClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="mRk-uy-TgY"/>
                                                 </connections>
@@ -81,11 +76,6 @@
                                                 <state key="normal" title="Да">
                                                     <color key="titleColor" name="YP Black"/>
                                                 </state>
-                                                <userDefinedRuntimeAttributes>
-                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius ">
-                                                        <integer key="value" value="15"/>
-                                                    </userDefinedRuntimeAttribute>
-                                                </userDefinedRuntimeAttributes>
                                                 <connections>
                                                     <action selector="yesButtonClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="kpu-nc-J1P"/>
                                                 </connections>
