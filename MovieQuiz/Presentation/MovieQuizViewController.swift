@@ -44,23 +44,13 @@ final class MovieQuizViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        //У меня проблема с установкой шрифта в Main, поэтому обозначаю его здесь
-        questionTitleLabel.font = UIFont(name: "YSDisplay-Medium", size: 20)
-        counterLabel.font = UIFont(name: "YSDisplay-Medium", size: 20)
-        textLabel.font = UIFont(name: "YSDisplay-Bold", size: 23)
-        noButton.titleLabel?.font = UIFont(name: "YSDisplay-Medium", size: 20)
-        yesButton.titleLabel?.font = UIFont(name: "YSDisplay-Medium", size: 20)
-        
-        //Закругление для кнопок и изображения
-        noButton.layer.cornerRadius = 15
-        yesButton.layer.cornerRadius = 15
-        imageView.layer.cornerRadius = 20
-        
+        setupViews()
         show(quiz: convert(model: questions[0]))
     }
     
     @IBAction private func noButtonClicked(_ sender: Any) {
+        noButton.isEnabled = false
+        yesButton.isEnabled = false
         if questions[currentQuestionIndex].correctAnswer == false {
             return showAnswerResult(isCorrect: true)
         }
@@ -68,6 +58,8 @@ final class MovieQuizViewController: UIViewController {
     }
     
     @IBAction private func yesButtonClicked(_ sender: Any) {
+        noButton.isEnabled = false
+        yesButton.isEnabled = false
         if questions[currentQuestionIndex].correctAnswer == true {
             return showAnswerResult(isCorrect: true)
         }
@@ -103,6 +95,8 @@ final class MovieQuizViewController: UIViewController {
     }
     
     private func showNextQuestionOrResults() {
+        noButton.isEnabled = true
+        yesButton.isEnabled = true
         if currentQuestionIndex == questions.count - 1 {
             show(quiz: QuizResultsViewModel(title: "Этот раунд окончен!", text: "Ваш результат: \(correctAnswers)/10", buttonText: "Сыграть ещё раз"))
         } else {
@@ -129,6 +123,18 @@ final class MovieQuizViewController: UIViewController {
         alert.addAction(action)
         
         self.present(alert, animated: true, completion: nil)
+    }
+    
+    private func setupViews() {
+        questionTitleLabel.font = UIFont(name: "YSDisplay-Medium", size: 20)
+        counterLabel.font = UIFont(name: "YSDisplay-Medium", size: 20)
+        textLabel.font = UIFont(name: "YSDisplay-Bold", size: 23)
+        noButton.titleLabel?.font = UIFont(name: "YSDisplay-Medium", size: 20)
+        yesButton.titleLabel?.font = UIFont(name: "YSDisplay-Medium", size: 20)
+        
+        noButton.layer.cornerRadius = 15
+        yesButton.layer.cornerRadius = 15
+        imageView.layer.cornerRadius = 20
     }
 }
 
