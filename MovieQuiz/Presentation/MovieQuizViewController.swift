@@ -132,9 +132,9 @@ final class MovieQuizViewController: UIViewController {
         noButton.titleLabel?.font = UIFont(name: "YSDisplay-Medium", size: 20)
         yesButton.titleLabel?.font = UIFont(name: "YSDisplay-Medium", size: 20)
         
-        noButton.layer.cornerRadius = 15
-        yesButton.layer.cornerRadius = 15
-        imageView.layer.cornerRadius = 20
+        //noButton.layer.cornerRadius = 15
+        //yesButton.layer.cornerRadius = 15
+        //imageView.layer.cornerRadius = 20
     }
 }
 
