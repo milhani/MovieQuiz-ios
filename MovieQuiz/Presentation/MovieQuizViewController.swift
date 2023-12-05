@@ -1,8 +1,5 @@
 import UIKit
 
-//var drive: (() -> Void)? = nil
-
-
 final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     
     @IBOutlet private var questionTitleLabel: UILabel!
@@ -17,6 +14,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
 
     private let questionsAmount: Int = 10
     private lazy var questionFactory: QuestionFactoryProtocol = QuestionFactory()
+    private var alertPresenter: AlertPresenter?
     private var currentQuestion: QuizQuestion?
     
     
@@ -108,28 +106,19 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     }
     
     private func show(quiz result: QuizResultsViewModel) {
-        let alert = UIAlertController(
+        let alertModel = AlertModel(
             title: result.title,
             message: result.text,
-            preferredStyle: .alert)
+            buttonText: result.buttonText,
+            completion: { [weak self] in
+                guard let self = self else { return }
+                self.currentQuestionIndex = 0
+                self.correctAnswers = 0
+                self.questionFactory.requestNextQuestion()
+            })
         
-        let action = UIAlertAction(title: result.buttonText, style: .default) { [weak self] _ in
-            guard let self = self else { return }
-
-            self.currentQuestionIndex = 0
-            self.correctAnswers = 0
-
-            self.questionFactory.requestNextQuestion()
-        }
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-            guard let self = self else { return }
-            self.showNextQuestionOrResults()
-        }
-        
-        alert.addAction(action)
-        
-        self.present(alert, animated: true, completion: nil)
+        alertPresenter = AlertPresenter(viewController: self)
+        alertPresenter?.show(alertModel: alertModel)
     }
     
     private func setupViews() {
@@ -205,3 +194,35 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
  Вопрос: Рейтинг этого фильма больше чем 6?
  Ответ: НЕТ
  */
+
+
+//
+//  AlertPresenter.swift
+//  MovieQuiz
+//
+
+//import UIKit
+//
+//class AlertPresenter {
+//    
+//    private weak var viewController: UIViewController?
+//    
+//    init(viewController: UIViewController? = nil) {
+//        self.viewController = viewController
+//    }
+//    
+//    func show(alertModel: AlertModel) {
+//        let alert = UIAlertController(
+//            title: alertModel.title,
+//            message: alertModel.message,
+//            preferredStyle: .alert)
+//        
+//        let action = UIAlertAction(title: alertModel.buttonText, style: .default) { _ in
+//            alertModel.completion()
+//        }
+//        
+//        alert.addAction(action)
+//        viewController?.present(alert, animated: true, completion: nil)
+//    }
+//}
+//
