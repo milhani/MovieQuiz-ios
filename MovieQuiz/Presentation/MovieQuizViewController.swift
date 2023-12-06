@@ -15,6 +15,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     private let questionsAmount: Int = 10
     private lazy var questionFactory: QuestionFactoryProtocol = QuestionFactory()
     private var alertPresenter: AlertPresenter?
+    private lazy var statisticService: StatisticService = StatisticServiceImplementation()
     private var currentQuestion: QuizQuestion?
     
     
@@ -22,6 +23,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         super.viewDidLoad()
         setupViews()
         questionFactory.delegate = self
+        alertPresenter = AlertPresenter(viewController: self)
         questionFactory.requestNextQuestion()
     }
     
@@ -106,9 +108,16 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     }
     
     private func show(quiz result: QuizResultsViewModel) {
+        statisticService.store(correct: correctAnswers, total: questionsAmount)
+        
         let alertModel = AlertModel(
             title: result.title,
-            message: result.text,
+            message: """
+                    Ваш результат: \(correctAnswers)/\(questionsAmount)
+                    Количество сыгранных квизов: \(statisticService.gamesCount)
+                    Рекорд: \(statisticService.bestGame.correct)/\(statisticService.bestGame.total) (\(statisticService.bestGame.date.dateTimeString))
+                    Средняя точность: \(String(format: "%.2f", statisticService.totalAccuracy))%
+                    """,
             buttonText: result.buttonText,
             completion: { [weak self] in
                 guard let self = self else { return }
@@ -116,8 +125,6 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
                 self.correctAnswers = 0
                 self.questionFactory.requestNextQuestion()
             })
-        
-        alertPresenter = AlertPresenter(viewController: self)
         alertPresenter?.show(alertModel: alertModel)
     }
     
@@ -194,35 +201,3 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
  Вопрос: Рейтинг этого фильма больше чем 6?
  Ответ: НЕТ
  */
-
-
-//
-//  AlertPresenter.swift
-//  MovieQuiz
-//
-
-//import UIKit
-//
-//class AlertPresenter {
-//    
-//    private weak var viewController: UIViewController?
-//    
-//    init(viewController: UIViewController? = nil) {
-//        self.viewController = viewController
-//    }
-//    
-//    func show(alertModel: AlertModel) {
-//        let alert = UIAlertController(
-//            title: alertModel.title,
-//            message: alertModel.message,
-//            preferredStyle: .alert)
-//        
-//        let action = UIAlertAction(title: alertModel.buttonText, style: .default) { _ in
-//            alertModel.completion()
-//        }
-//        
-//        alert.addAction(action)
-//        viewController?.present(alert, animated: true, completion: nil)
-//    }
-//}
-//
