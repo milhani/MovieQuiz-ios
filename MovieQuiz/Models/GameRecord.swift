@@ -2,7 +2,15 @@
 //  GameRecord.swift
 //  MovieQuiz
 //
-//  Created by Людмила Ханина on 06.12.2023.
-//
 
 import Foundation
+
+struct GameRecord: Codable {
+    let correct: Int
+    let total: Int
+    let date: Date
+    
+    func compare(another: GameRecord) -> Bool {
+        return  another.correct < correct
+    }
+}
