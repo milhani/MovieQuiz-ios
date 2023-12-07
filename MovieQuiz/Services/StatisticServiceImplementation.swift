@@ -32,6 +32,9 @@ final class StatisticServiceImplementation: StatisticService {
     }
 
     var totalAccuracy: Double {
+        if total == 0 {
+            return 0
+        }
         return Double(correct) / Double(total) * 100
     }
     
