@@ -2,6 +2,7 @@ import UIKit
 
 final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     
+    @IBOutlet private var activityIndicator: UIActivityIndicatorView!
     @IBOutlet private var questionTitleLabel: UILabel!
     @IBOutlet private var counterLabel: UILabel!
     @IBOutlet private var textLabel: UILabel!
@@ -64,6 +65,11 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         }
         return showAnswerResult(isCorrect: false)
     }
+    
+    private func showLoadingIndicator() {
+        activityIndicator.isHidden = false
+        activityIndicator.startAnimating()
+    }
 
     private func convert(model: QuizQuestion) -> QuizStepViewModel {
         let viewModel = QuizStepViewModel(image: UIImage(named: model.image) ?? UIImage(), question: model.text, questionNumber: "\(currentQuestionIndex + 1)/\(questionsAmount)")
@@ -119,6 +125,23 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
                     Средняя точность: \(String(format: "%.2f", statisticService.totalAccuracy))%
                     """,
             buttonText: result.buttonText,
+            completion: { [weak self] in
+                guard let self = self else { return }
+                self.currentQuestionIndex = 0
+                self.correctAnswers = 0
+                self.questionFactory.requestNextQuestion()
+            })
+        alertPresenter?.show(alertModel: alertModel)
+    }
+    
+    private func showNetworkError(message: String) {
+        //hideLoadingIndicator() // скрываем индикатор загрузки
+        activityIndicator.isHidden = true
+        
+        let alertModel = AlertModel(
+            title: "Ошибка",
+            message: message,
+            buttonText: "Попробовать ещё раз",
             completion: { [weak self] in
                 guard let self = self else { return }
                 self.currentQuestionIndex = 0
