@@ -16,8 +16,8 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     private var questionFactory: QuestionFactory?
     private var alertPresenter: AlertPresenter?
     private lazy var statisticService: StatisticService = StatisticServiceImplementation()
-    private var currentQuestion: QuizQuestion?
     
+    private var currentQuestion: QuizQuestion?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,6 +26,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         alertPresenter = AlertPresenter(viewController: self)
         showLoadingIndicator()
         questionFactory?.loadData()
+        presenter.viewController = self
     }
     
     // MARK: - QuestionFactoryDelegate
@@ -42,29 +43,15 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         }
     }
     
-    @IBAction private func noButtonClicked(_ sender: Any) {
-        noButton.isEnabled = false
-        yesButton.isEnabled = false
-        guard let currentQuestion = currentQuestion else {
-            return
+    @IBAction private func yesButtonClicked(_ sender: UIButton) {
+            presenter.currentQuestion = currentQuestion
+            presenter.yesButtonClicked()
         }
-        if currentQuestion.correctAnswer == false {
-            return showAnswerResult(isCorrect: true)
-        }
-        return showAnswerResult(isCorrect: false)
-    }
     
-    @IBAction private func yesButtonClicked(_ sender: Any) {
-        noButton.isEnabled = false
-        yesButton.isEnabled = false
-        guard let currentQuestion = currentQuestion else {
-            return
+    @IBAction private func noButtonClicked(_ sender: UIButton) {
+            presenter.currentQuestion = currentQuestion
+            presenter.noButtonClicked()
         }
-        if currentQuestion.correctAnswer == true {
-            return showAnswerResult(isCorrect: true)
-        }
-        return showAnswerResult(isCorrect: false)
-    }
     
     private func showLoadingIndicator() {
         activityIndicator.isHidden = false
@@ -77,7 +64,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         counterLabel.text = step.questionNumber
     }
     
-    private func showAnswerResult(isCorrect: Bool) {
+    func showAnswerResult(isCorrect: Bool) {
         imageView.layer.masksToBounds = true
         imageView.layer.borderWidth = 8
         imageView.layer.cornerRadius = 20
