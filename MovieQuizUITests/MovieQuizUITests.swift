@@ -26,13 +26,6 @@ final class MovieQuizUITests: XCTestCase {
             app = nil
     }
 
-    func testExample() throws {
-        try super.tearDownWithError()
-        
-        app.terminate()
-        app = nil
-    }
-    
     func testYesButton() {
         sleep(3)
         
@@ -45,7 +38,10 @@ final class MovieQuizUITests: XCTestCase {
         let secondPoster = app.images["Poster"]
         let secondPosterData = secondPoster.screenshot().pngRepresentation
         
-        XCTAssertNotEqual(firstPosterData, secondPosterData)
+        let indexLabel = app.staticTexts["Index"]
+                   
+        XCTAssertEqual(indexLabel.label, "2/10")
+        XCTAssertFalse(firstPosterData == secondPosterData)
     }
     
     func testNoButton() {
@@ -61,6 +57,11 @@ final class MovieQuizUITests: XCTestCase {
         let secondPosterData = secondPoster.screenshot().pngRepresentation
         
         XCTAssertNotEqual(firstPosterData, secondPosterData)
+        
+        let indexLabel = app.staticTexts["Index"]
+                   
+        XCTAssertEqual(indexLabel.label, "2/10")
+        XCTAssertFalse(firstPosterData == secondPosterData)
     }
     
     func testAlert() {
@@ -71,7 +72,7 @@ final class MovieQuizUITests: XCTestCase {
                 sleep(2)
         }
         
-        let alert = app.alerts["Game results"]
+        let alert = app.alerts.firstMatch
         XCTAssertTrue(alert.exists)
         XCTAssertTrue(alert.label == "Этот раунд окончен!")
         XCTAssertTrue(alert.buttons.firstMatch.label == "Сыграть ещё раз")
@@ -84,7 +85,7 @@ final class MovieQuizUITests: XCTestCase {
             sleep(2)
         }
         
-        let alert = app.alerts["Game results"]
+        let alert = app.alerts.firstMatch
         alert.buttons.firstMatch.tap()
         
         sleep(2)
