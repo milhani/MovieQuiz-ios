@@ -4,6 +4,7 @@
 //
 
 import XCTest
+@testable import MovieQuiz
 
 final class MovieQuizUITestsLaunchTests: XCTestCase {
 
