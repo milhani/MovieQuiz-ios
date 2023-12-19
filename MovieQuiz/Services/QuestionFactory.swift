@@ -13,8 +13,8 @@ class QuestionFactory: QuestionFactoryProtocol {
     private var movies: [MostPopularMovie] = []
     
     init(moviesLoader: MoviesLoading, delegate: QuestionFactoryDelegate?) {
-            self.moviesLoader = moviesLoader
-            self.delegate = delegate
+        self.moviesLoader = moviesLoader
+        self.delegate = delegate
     }
     
     func requestNextQuestion() {
