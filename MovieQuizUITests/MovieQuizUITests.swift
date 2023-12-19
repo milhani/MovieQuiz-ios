@@ -19,7 +19,10 @@ final class MovieQuizUITests: XCTestCase {
     }
 
     override func tearDownWithError() throws {
-        app = nil
+            try super.tearDownWithError()
+            
+            app.terminate()
+            app = nil
     }
 
     func testExample() throws {
