@@ -13,8 +13,8 @@ class QuestionFactory: QuestionFactoryProtocol {
     private var movies: [MostPopularMovie] = []
     
     init(moviesLoader: MoviesLoading, delegate: QuestionFactoryDelegate?) {
-            self.moviesLoader = moviesLoader
-            self.delegate = delegate
+        self.moviesLoader = moviesLoader
+        self.delegate = delegate
     }
     
     func requestNextQuestion() {
@@ -26,7 +26,7 @@ class QuestionFactory: QuestionFactoryProtocol {
             
             var imageData = Data()
            
-           do {
+            do {
                 imageData = try Data(contentsOf: movie.resizedImageURL)
             } catch {
                 print("Failed to load image")
@@ -34,26 +34,9 @@ class QuestionFactory: QuestionFactoryProtocol {
             
             let rating = Float(movie.rating) ?? 0
             
-            let text: String
-            let correctAnswer: Bool
-            let number = (6..<10).randomElement()
-            switch number {
-            case 6:
-                text = "Рейтинг этого фильма больше чем 6?"
-                correctAnswer = rating > 6
-            case 7:
-                text = "Рейтинг этого фильма больше чем 7?"
-                correctAnswer = rating > 7
-            case 8:
-                text = "Рейтинг этого фильма больше чем 8?"
-                correctAnswer = rating > 8
-            case 9:
-                text = "Рейтинг этого фильма больше чем 9?"
-                correctAnswer = rating > 9
-            default:
-                text = "Рейтинг этого фильма больше чем 5?"
-                correctAnswer = rating > 5
-            }
+            let number = (6..<10).randomElement() ?? 5
+            let text = "Рейтинг этого фильма больше чем \(number)?"
+            let correctAnswer = rating > Float(number)
             
             let question = QuizQuestion(image: imageData,
                                          text: text,
